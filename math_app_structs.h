@@ -6,7 +6,7 @@
 /// @brief min_range_a = Possible minimum value of generated numbers.
 /// @brief max_range_b = Possible maximum value of generated numbers.
 /// @brief *desc, should hold text data on how this mathimatical operation is done.
-/// @brief *Finally status i keeping track on wheter or not the operation is active or not.
+/// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Addition
 {
     int term_a, term_b, sum;
@@ -20,12 +20,13 @@ typedef struct Addition
 /// @brief min_range_a = Possible minimum value of generated numbers.
 /// @brief max_range_b = Possible maximum value of generated numbers.
 /// @brief *desc, should hold text data on how this mathimatical operation is done.
-/// @brief *Finally status i keeping track on wheter or not the operation is active or not.
+/// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Subtraction
 {
     int term_a, term_b, sum;
     int min_range, max_range;
     char *desc;
+    bool status;
 }Subtraction;
 
 
@@ -35,12 +36,13 @@ typedef struct Subtraction
 /// @brief min_range_a = Possible minimum value of generated numbers.
 /// @brief max_range_b = Possible maximum value of generated numbers.
 /// @brief *desc, should hold text data on how this mathimatical operation is done.
-/// @brief *Finally status i keeping track on wheter or not the operation is active or not.
+/// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Multiplication
 {
     int factor_a, factor_b, product;
     int min_range, max_range;
     char *desc;
+    bool status;
 }Multiplication;
 
 
@@ -49,12 +51,13 @@ typedef struct Multiplication
 /// @brief min_range_a = Possible minimum value of generated numbers.
 /// @brief max_range_b = Possible maximum value of generated numbers.
 /// @brief *desc, should hold text data on how this mathimatical operation is done.
-/// @brief *Finally status i keeping track on wheter or not the operation is active or not.
+/// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Division
 {
     int numerator, denominator, quotient;
     int min_range, max_range;
     char *desc;
+    bool status;
 }Division;
 
 /// @brief In future add exponentiation, nthroot and logarithm 
