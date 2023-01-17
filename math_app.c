@@ -11,12 +11,11 @@ int main(void)
 	srand(time(NULL));
 	runApplication();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 void runApplication()
 {
-
 	bool isRunning = true, initialized = false;
 
 	Addition add;
@@ -42,122 +41,124 @@ void runApplication()
 Addition setUpAddition(void)
 {
 	Addition add;
-	bool initializing;
-	int khit;
 
-	printf("Would you like to turn on the addition operator(1):");
-	scanf("%d", &khit);
-	printf("\n");
-
-	initializing = khit == 1 ? true : false;
-	add.status = initializing == true ? true : false;
-
-	while (initializing)
+	puts("Would you like to turn on the addition operator, yes(y) No(n):");
+	add.status = useOperator() == true ? true : false;
+	if (add.status)
 	{
-		printf("Set minimum value for this operator: ");
-		scanf("%d", &add.min_range);
-		printf("\n");
-
-		printf("Set maximum value for this operator: ");
-		scanf("%d", &add.max_range);
-		printf("\n");
-
-		initializing = false;
+		getMinMax(&add.min_range, &add.min_range);
 	}
+
+
+	system("clear");
 
 	return add;
 }
 
-
 Subtraction setUpSubtraction(void)
 {
 	Subtraction sub;
-	bool initializing;
-	int khit;
 
-	printf("Would you like to turn on the subtraction operator(1):");
-	scanf("%d", &khit);
-	printf("\n");
-
-	initializing = khit == 1 ? true : false;
-	sub.status = initializing == true ? true : false;
-	
-	while (initializing)
+	puts("Would you like to turn on the subtraction operator, yes(y) No(n):");
+	sub.status = useOperator() == true ? true : false;
+	if (sub.status)
 	{
-		printf("Set minimum value for this operator: ");
-		scanf("%d", &sub.min_range);
-		printf("\n");
-
-		printf("Set maximum value for this operator: ");
-		scanf("%d", &sub.max_range);
-		printf("\n");
-
-		initializing = false;
+		getMinMax(&sub.min_range, &sub.min_range);
 	}
-	
+
+	system("clear");
+
 	return sub;
 }
-
 
 Multiplication setUpMultiplication(void)
 {
 	Multiplication mult;
-	bool initializing;
-	int khit;
-	
-	printf("Would you like to turn on the multiplication operator(1):");
-	scanf("%d", &khit);
-	printf("\n");
 
-	initializing = khit == 1 ? true : false;
-	mult.status = initializing == true ? true : false;
-
-	while (initializing)
+	puts("Would you like to turn on the multiplication operator, yes(y) No(n):");
+	mult.status = useOperator() == true ? true : false;
+	if (mult.status)
 	{
-		printf("Set minimum value for this operator: ");
-		scanf("%d", &mult.min_range);
-		printf("\n");
-
-		printf("Set maximum value for this operator: ");
-		scanf("%d", &mult.max_range);
-		printf("\n");
-
-		initializing = false;
+		getMinMax(&mult.min_range, &mult.min_range);
 	}
+
+	system("clear");
 
 	return mult;
 }
 
-
 Division setUpDivision(void)
 {
 	Division div;
-	bool initializing;
-	int khit;
 
-	printf("Would you like to turn on the division operator(1):");
-	scanf("%d", &khit);
-	printf("\n");
-	
-	initializing = khit == 1 ? true : false;
-	div.status = initializing == true ? true : false;
-
-	while (initializing)
+	fputs("Would you like to turn on the division operator, yes(y) No(n): ", stdout);
+	div.status = useOperator() == true ? true : false;
+	if (div.status)
 	{
-		printf("Set minimum value for this operator: ");
-		scanf("%d", &div.min_range);
-		printf("\n");
-
-		printf("Set maximum value for this operator: ");
-		scanf("%d", &div.max_range);
-		printf("\n");
-
-		initializing = false;
+		getMinMax(&div.min_range, &div.min_range);
 	}
+
+	system("clear");
 
 	return div;
 }
 
+bool useOperator()
+{
+	int key_pressed = WHITESPACE;
+
+	while (key_pressed != 'y' && key_pressed != 'Y' &&
+		   key_pressed != 'n' && key_pressed != 'N')
+	{
+		key_pressed = getc(stdin);
+	}
+
+	return key_pressed == 'y' || key_pressed == 'Y' ? true : false;
+}
+
+void getMinMax(int *min, int *max)
+{	
+	char *input;
+	bool setMin = true, setMax = true;
+	while(setMax)
+	{
+		fputs("Set the maximum value for this operator: ", stdout);
+		input = getString();
+		free(input);
+		setMax = false; 
+	}
+	puts(input);
+}
+
+char *getString()
+{
+	int index = 0, key_pressed = 0;
+	char *input = malloc(sizeof(char));
+	if(input == NULL)
+	{
+		exit(-1);
+	}
+
+	while((key_pressed = getchar()) != EOF)
+	{	
+		key_pressed = getchar(); 
+		if(key_pressed == ENTER)
+		{
+			break;
+		}
+
+		input[index++] = (char)key_pressed; 
+		input = realloc(input, (index + 1) * sizeof(char));
+		if(input == NULL)
+		{
+			exit(-1);
+		}
+	}
+
+	input[index + 1] = '\0';
+
+	return input;
+}
 
 void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 {
@@ -166,7 +167,7 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 
 	system("clear");
 	printf("Test started: \n");
-	
+
 	while (testing)
 	{
 		typeOfTest = rand() % 4 + 1;
@@ -175,11 +176,11 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 		case 1:
 			typeOfTest = runAdditionTest(add, typeOfTest);
 		case 2:
-			typeOfTest = runSubtractionTest(sub, typeOfTest); 
+			typeOfTest = runSubtractionTest(sub, typeOfTest);
 		case 3:
 			typeOfTest = runMultiplicationTest(mult, typeOfTest);
 		case 4:
-			typeOfTest = runDivisionTest(div, typeOfTest); 	
+			typeOfTest = runDivisionTest(div, typeOfTest);
 		case 5:
 			break;
 		}
@@ -190,7 +191,7 @@ int runAdditionTest(Addition add, int typeOfTest)
 {
 	int answer;
 
-	if(add.status == false)
+	if (add.status == false)
 	{
 		return typeOfTest + 1;
 	}
@@ -203,11 +204,11 @@ int runAdditionTest(Addition add, int typeOfTest)
 	scanf("%d", &answer);
 	printf("\n");
 
-	if(answer == add.sum)
+	if (answer == add.sum)
 	{
 		printf("Correct!\n");
-	} 
-	else 
+	}
+	else
 	{
 		printf("Wrong!\n");
 	}
@@ -219,7 +220,7 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 {
 	int answer;
 
-	if(sub.status == false)
+	if (sub.status == false)
 	{
 		return typeOfTest + 1;
 	}
@@ -232,11 +233,11 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 	scanf("%d", &answer);
 	printf("\n");
 
-	if(answer == sub.sum)
+	if (answer == sub.sum)
 	{
 		printf("Correct!\n");
-	} 
-	else 
+	}
+	else
 	{
 		printf("Wrong!\n");
 	}
@@ -246,7 +247,7 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 {
 	int answer;
 
-	if(mult.status == false)
+	if (mult.status == false)
 	{
 		return typeOfTest + 1;
 	}
@@ -255,16 +256,15 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 	mult.factor_b = rand() % mult.max_range + mult.min_range;
 	mult.product = mult.factor_a * mult.factor_b;
 
-
 	printf("%d * %d = ", mult.factor_a, mult.factor_b);
 	scanf("%d", &answer);
 	printf("\n");
 
-	if(answer == mult.product)
+	if (answer == mult.product)
 	{
 		printf("Correct!\n");
-	} 
-	else 
+	}
+	else
 	{
 		printf("Wrong!\n");
 	}
@@ -274,7 +274,7 @@ int runDivisionTest(Division div, int typeOfTest)
 {
 	int answer;
 
-	if(div.status == false)
+	if (div.status == false)
 	{
 		return typeOfTest + 1;
 	}
@@ -288,13 +288,12 @@ int runDivisionTest(Division div, int typeOfTest)
 	scanf("%d", &answer);
 	printf("\n");
 
-	if(answer == div.quotient)
+	if (answer == div.quotient)
 	{
 		printf("Correct!\n");
-	} 
-	else 
+	}
+	else
 	{
 		printf("Wrong!\n");
 	}
 }
-
