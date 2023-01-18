@@ -1,7 +1,13 @@
+/*
+    Writen by: Oscar Bergström
+    https://github.com/OSCARJFB
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
 #include "math_app_macros.h"
 #include "math_app_prototypes.h"
 #include "math_app_structs.h"
@@ -42,15 +48,12 @@ Addition setUpAddition(void)
 {
 	Addition add;
 
-	puts("Would you like to turn on the addition operator, yes(y) No(n):");
-	add.status = useOperator() == true ? true : false;
+	const char *msg = "Would you like to turn on the addition operator, yes? press (y): ";
+	add.status = useOperator(msg) == true ? true : false;
 	if (add.status)
 	{
 		getMinMax(&add.min_range, &add.min_range);
 	}
-
-
-	system("clear");
 
 	return add;
 }
@@ -59,14 +62,12 @@ Subtraction setUpSubtraction(void)
 {
 	Subtraction sub;
 
-	puts("Would you like to turn on the subtraction operator, yes(y) No(n):");
-	sub.status = useOperator() == true ? true : false;
+	const char *msg = "Would you like to turn on the subtraction operator, yes? press (y): ";
+	sub.status = useOperator(msg) == true ? true : false;
 	if (sub.status)
 	{
 		getMinMax(&sub.min_range, &sub.min_range);
 	}
-
-	system("clear");
 
 	return sub;
 }
@@ -75,14 +76,12 @@ Multiplication setUpMultiplication(void)
 {
 	Multiplication mult;
 
-	puts("Would you like to turn on the multiplication operator, yes(y) No(n):");
-	mult.status = useOperator() == true ? true : false;
+	const char *msg = "Would you like to turn on the multiplication operator, yes? press (y): ";
+	mult.status = useOperator(msg) == true ? true : false;
 	if (mult.status)
 	{
 		getMinMax(&mult.min_range, &mult.min_range);
 	}
-
-	system("clear");
 
 	return mult;
 }
@@ -91,29 +90,27 @@ Division setUpDivision(void)
 {
 	Division div;
 
-	fputs("Would you like to turn on the division operator, yes(y) No(n): ", stdout);
-	div.status = useOperator() == true ? true : false;
+	const char *msg = "Would you like to turn on the division operator, yes? press (y): ";
+	div.status = useOperator(msg) == true ? true : false;
 	if (div.status)
 	{
 		getMinMax(&div.min_range, &div.min_range);
 	}
 
-	system("clear");
-
 	return div;
 }
 
-bool useOperator()
+bool useOperator(const char *msg)
 {
-	int key_pressed = WHITESPACE;
+	char *input;
+	bool use;
 
-	while (key_pressed != 'y' && key_pressed != 'Y' &&
-		   key_pressed != 'n' && key_pressed != 'N')
-	{
-		key_pressed = getc(stdin);
-	}
+	printf("%s", msg);
+	input = getString();
+	use = strcmp(input, "y") == 0 || strcmp(input, "Y") == 0 ? true : false;
+	free(input);
 
-	return key_pressed == 'y' || key_pressed == 'Y' ? true : false;
+	return use;
 }
 
 void getMinMax(int *min, int *max)
@@ -122,15 +119,14 @@ void getMinMax(int *min, int *max)
 	bool setMin = true, setMax = true;
 	while(setMax)
 	{
-		fputs("Set the maximum value for this operator: ", stdout);
+		printf("Set the maximum value for this operator: ");
 		input = getString();
 		free(input);
 		setMax = false; 
 	}
-	puts(input);
 }
 
-char *getString()
+char *getString(void)
 {
 	int index = 0, key_pressed = 0;
 	char *input = malloc(sizeof(char));
@@ -141,7 +137,6 @@ char *getString()
 
 	while((key_pressed = getchar()) != EOF)
 	{	
-		key_pressed = getchar(); 
 		if(key_pressed == ENTER)
 		{
 			break;

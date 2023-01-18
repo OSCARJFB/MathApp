@@ -12,9 +12,11 @@ Division setUpDivision(void);
 Subtraction setUpSubtraction(void);
 Multiplication setUpMultiplication(void);
 Division setUpDivision(void);
-bool useOperator();
+/// @brief This function allow the user to set the different math operators ON or OFF.
+/// @param char*  
+bool useOperator(const char*);
 void getMinMax(int*, int*);
-char *getString();
+char *getString(void);
 void runTests(Addition, Subtraction, Multiplication, Division);
 int runAdditionTest(Addition, int);
 int runSubtractionTest(Subtraction, int);
