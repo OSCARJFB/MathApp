@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
 #include "math_app_macros.h"
 #include "math_app_prototypes.h"
 #include "math_app_structs.h"
@@ -115,12 +116,37 @@ bool useOperator(const char *msg)
 
 void getMinMax(int *min, int *max)
 {	
-	char *input;
+	char *input, *endptr;
 	bool setMin = true, setMax = true;
+	long result; 
+
 	while(setMax)
 	{
+		printf("Set the minimum value for this operator: ");
+		input = getString();
+		errno = 0; 
+		result = strtol(input, &endptr, 10);
+		if(errno != 0 || input == endptr)
+		{
+			perror("strtol"); 
+		}
+		else 
+		{
+			*min = (int)result;
+		}
+		
 		printf("Set the maximum value for this operator: ");
 		input = getString();
+		errno = 0; 
+		if(errno != 0 || input == endptr)
+		{
+			perror("strtol"); 
+		}
+		else 
+		{
+			*min = (int)result;
+		}
+
 		free(input);
 		setMax = false; 
 	}
