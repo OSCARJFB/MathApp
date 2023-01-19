@@ -60,7 +60,4 @@ typedef struct Division
     bool status;
 }Division;
 
-/// @brief In future add exponentiation, nthroot and logarithm 
-
-
 #endif // MATH_APP_STRUCTS_H
