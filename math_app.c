@@ -1,6 +1,6 @@
 /*
-    Writen by: Oscar Bergström
-    https://github.com/OSCARJFB
+	Writen by: Oscar Bergström
+	https://github.com/OSCARJFB
 */
 
 #include <stdio.h>
@@ -103,74 +103,90 @@ Division setUpDivision(void)
 
 bool useOperator(const char *msg)
 {
-	char *input;
-	bool use;
+	char *input = NULL;
+	bool use = false;
 
 	printf("%s", msg);
 	input = getString();
 	use = strcmp(input, "y") == 0 || strcmp(input, "Y") == 0 ? true : false;
+
 	free(input);
+	input = NULL;
 
 	return use;
 }
 
 void getMinMax(int *min, int *max)
-{	
-	char *input, *endptr;
+{
+	char *input = NULL, *endptr = NULL;
 	bool setMin = true, setMax = true;
-	long result; 
+	long result = 0;
 
-	while(setMax)
+	while (setMax)
 	{
 		printf("Set the minimum value for this operator: ");
 		input = getString();
-		errno = 0; 
+		errno = 0;
 		result = strtol(input, &endptr, 10);
-		if(errno != 0 || input == endptr)
+		if (errno != 0 || input == endptr)
 		{
-			perror("strtol"); 
+			perror("strtol");
 		}
-		else 
+		else
 		{
 			*min = (int)result;
-		}
-		
-		printf("Set the maximum value for this operator: ");
-		input = getString();
-		errno = 0; 
-		if(errno != 0 || input == endptr)
-		{
-			perror("strtol"); 
-		}
-		else 
-		{
-			*min = (int)result;
+			setMax = false;
 		}
 
 		free(input);
-		setMax = false; 
+		input = NULL;
+
+		setMax = false;
 	}
+
+	while (setMin)
+	{
+		printf("Set the maximum value for this operator: ");
+		input = getString();
+		errno = 0;
+		result = strtol(input, &endptr, 10);
+		if (errno != 0 || input == endptr)
+		{
+			perror("strtol");
+		}
+		else
+		{
+			*min = (int)result;
+			setMin = false;
+		}
+
+		free(input);
+		input = NULL;
+
+		setMin = false;
+	}
+
 }
 
 char *getString(void)
 {
 	int index = 0, key_pressed = 0;
 	char *input = malloc(sizeof(char));
-	if(input == NULL)
+	if (input == NULL)
 	{
 		exit(-1);
 	}
 
-	while((key_pressed = getchar()) != EOF)
-	{	
-		if(key_pressed == ENTER)
+	while ((key_pressed = getchar()) != EOF)
+	{
+		if (key_pressed == ENTER)
 		{
 			break;
 		}
 
-		input[index++] = (char)key_pressed; 
+		input[index++] = (char)key_pressed;
 		input = realloc(input, (index + 1) * sizeof(char));
-		if(input == NULL)
+		if (input == NULL)
 		{
 			exit(-1);
 		}
@@ -184,7 +200,7 @@ char *getString(void)
 void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 {
 	bool testing = true;
-	int typeOfTest;
+	int typeOfTest = 1;
 
 	system("clear");
 	printf("Test started: \n");
@@ -210,7 +226,7 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 
 int runAdditionTest(Addition add, int typeOfTest)
 {
-	int answer;
+	int answer = 0;
 
 	if (add.status == false)
 	{
@@ -239,7 +255,7 @@ int runAdditionTest(Addition add, int typeOfTest)
 
 int runSubtractionTest(Subtraction sub, int typeOfTest)
 {
-	int answer;
+	int answer = 0;
 
 	if (sub.status == false)
 	{
@@ -266,7 +282,7 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 
 int runMultiplicationTest(Multiplication mult, int typeOfTest)
 {
-	int answer;
+	int answer = 0;
 
 	if (mult.status == false)
 	{
@@ -293,15 +309,19 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 
 int runDivisionTest(Division div, int typeOfTest)
 {
-	int answer;
+	int answer = 0;
 
 	if (div.status == false)
 	{
 		return typeOfTest + 1;
 	}
 
-	div.numerator = rand() % div.max_range + div.min_range;
-	div.denominator = rand() % div.max_range + div.min_range;
+	do
+	{
+		div.numerator = rand() % div.max_range + div.min_range;
+		div.denominator = rand() % div.max_range + div.min_range;
+	} while (div.numerator == 0 || div.denominator == 0);
+
 	div.numerator = div.denominator > div.numerator ? div.denominator : div.numerator;
 	div.quotient = div.numerator / div.denominator;
 

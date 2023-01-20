@@ -6,9 +6,6 @@
 void runApplication(void);
 
 /// @brief 
-void exitApp(void);
-
-/// @brief 
 /// @param  
 /// @return 
 Addition setUpAddition(void);
