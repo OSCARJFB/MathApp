@@ -156,7 +156,7 @@ void getMinMax(int *min, int *max)
 		}
 		else
 		{
-			*min = (int)result;
+			*max = (int)result;
 			setMin = false;
 		}
 
@@ -171,7 +171,8 @@ void getMinMax(int *min, int *max)
 char *getString(void)
 {
 	int index = 0, key_pressed = 0;
-	char *input = malloc(sizeof(char));
+	char *input = NULL; 
+	input = malloc(sizeof(char));
 	if (input == NULL)
 	{
 		exit(-1);
@@ -192,7 +193,7 @@ char *getString(void)
 		}
 	}
 
-	input[index + 1] = '\0';
+	input[index] = '\0';
 
 	return input;
 }
