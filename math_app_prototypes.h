@@ -1,3 +1,8 @@
+/*
+	Writen by: Oscar Bergström
+	https://github.com/OSCARJFB
+*/
+
 #ifndef MATH_APP_PROTOTYPES_H
 #define MATH_APP_PROTOTYPES_H
 #include "math_app_structs.h"

@@ -1,3 +1,8 @@
+/*
+	Writen by: Oscar Bergström
+	https://github.com/OSCARJFB
+*/
+
 #ifndef MATH_APP_MACROS_H
 #define MATH_APP_MACROS_H
 
