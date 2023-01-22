@@ -12,6 +12,8 @@
 #include "math_app_macros.h"
 #include "math_app_prototypes.h"
 #include "math_app_structs.h"
+#include "math_app_enums.h"
+
 
 int main(void)
 {
@@ -53,9 +55,9 @@ Addition setUpAddition(void)
 	add.status = useOperator(msg) == true ? true : false;
 	if (add.status)
 	{
-		getMinMax(&add.min_range, &add.min_range);
+		getMinMax(&add.min_range, &add.max_range);
 	}
-
+	
 	return add;
 }
 
@@ -67,7 +69,7 @@ Subtraction setUpSubtraction(void)
 	sub.status = useOperator(msg) == true ? true : false;
 	if (sub.status)
 	{
-		getMinMax(&sub.min_range, &sub.min_range);
+		getMinMax(&sub.min_range, &sub.max_range);
 	}
 
 	return sub;
@@ -81,7 +83,7 @@ Multiplication setUpMultiplication(void)
 	mult.status = useOperator(msg) == true ? true : false;
 	if (mult.status)
 	{
-		getMinMax(&mult.min_range, &mult.min_range);
+		getMinMax(&mult.min_range, &mult.max_range);
 	}
 
 	return mult;
@@ -95,7 +97,7 @@ Division setUpDivision(void)
 	div.status = useOperator(msg) == true ? true : false;
 	if (div.status)
 	{
-		getMinMax(&div.min_range, &div.min_range);
+		getMinMax(&div.min_range, &div.max_range);
 	}
 
 	return div;
@@ -165,7 +167,6 @@ void getMinMax(int *min, int *max)
 
 		setMin = false;
 	}
-
 }
 
 char *getString(void)
@@ -211,15 +212,15 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 		typeOfTest = rand() % 4 + 1;
 		switch (typeOfTest)
 		{
-		case 1:
+		case addition:
 			typeOfTest = runAdditionTest(add, typeOfTest);
-		case 2:
+		case subtraction:
 			typeOfTest = runSubtractionTest(sub, typeOfTest);
-		case 3:
+		case multiplication:
 			typeOfTest = runMultiplicationTest(mult, typeOfTest);
-		case 4:
+		case division:
 			typeOfTest = runDivisionTest(div, typeOfTest);
-		case 5:
+		case no_test:
 			break;
 		}
 	}
@@ -316,7 +317,7 @@ int runDivisionTest(Division div, int typeOfTest)
 	{
 		return typeOfTest + 1;
 	}
-
+	printf("FAIL DIVISION\n");
 	do
 	{
 		div.numerator = rand() % div.max_range + div.min_range;
