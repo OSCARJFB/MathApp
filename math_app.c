@@ -120,6 +120,12 @@ bool useOperator(const char *msg)
 
 void getMinMax(int *min, int *max)
 {
+	if(min == NULL || max == NULL)
+	{
+		printf("Error nullptr at: getMinMax"); 
+		exit(-1); 
+	}
+	
 	char *input = NULL, *endptr = NULL;
 	bool setMin = true, setMax = true;
 	long result = 0;
@@ -303,7 +309,7 @@ int runDivisionTest(Division div, int typeOfTest)
 	{
 		return typeOfTest + 1;
 	}
-	printf("FAIL DIVISION\n");
+
 	do
 	{
 		div.numerator = rand() % div.max_range + div.min_range;
@@ -325,4 +331,22 @@ int runDivisionTest(Division div, int typeOfTest)
 	{
 		printf("Wrong!\n");
 	}
+}
+
+float convertInputToFloat(char *input)
+{
+	if(input == NULL)
+	{
+		printf("Error nullptr at: convertInputToFloat"); 
+		exit(-1); 
+	}
+
+	char *endptr = NULL;
+	bool setMin = true, setMax = true;
+	float result = 0;
+	free(input); 
+
+	// result = strtof();
+
+	return 1.0;
 }
