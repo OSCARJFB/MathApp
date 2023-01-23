@@ -123,10 +123,12 @@ void getMinMax(int *min, int *max)
 	char *input = NULL, *endptr = NULL;
 	bool setMin = true, setMax = true;
 	long result = 0;
+	const char *min_msg = "Set the minimum value for this operator: ";
+	const char *max_msg = "Set the maximum value for this operator: ";
 
-	while (setMax)
+	while (setMin || setMax)
 	{
-		printf("Set the minimum value for this operator: ");
+		setMin == true ? printf("%s", min_msg) : printf("%s", max_msg); 
 		input = getString();
 		errno = 0;
 		result = strtol(input, &endptr, 10);
@@ -134,38 +136,20 @@ void getMinMax(int *min, int *max)
 		{
 			perror("strtol");
 		}
-		else
+		else if(setMin)
 		{
 			*min = (int)result;
+			setMin = false;
+		}
+		else if(setMax)
+		{
+			*max = (int)result;
 			setMax = false;
 		}
 
 		free(input);
 		input = NULL;
-
-		setMax = false;
-	}
-
-	while (setMin)
-	{
-		printf("Set the maximum value for this operator: ");
-		input = getString();
-		errno = 0;
-		result = strtol(input, &endptr, 10);
-		if (errno != 0 || input == endptr)
-		{
-			perror("strtol");
-		}
-		else
-		{
-			*max = (int)result;
-			setMin = false;
-		}
-
-		free(input);
-		input = NULL;
-
-		setMin = false;
+		endptr = NULL;
 	}
 }
 
@@ -285,6 +269,7 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 int runMultiplicationTest(Multiplication mult, int typeOfTest)
 {
 	int answer = 0;
+	char *input = NULL;
 
 	if (mult.status == false)
 	{
@@ -296,7 +281,8 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 	mult.product = mult.factor_a * mult.factor_b;
 
 	printf("%d * %d = ", mult.factor_a, mult.factor_b);
-	scanf("%d", &answer);
+	input = getString();
+
 	printf("\n");
 
 	if (answer == mult.product)
