@@ -10,39 +10,24 @@
 /// @brief Runs the application until escape sequence is hit.
 void runApplication(void);
 
-/// @brief 
-/// @param  
-/// @return 
+/// @brief initialization for addition.
+/// @return struct with operation data. 
 Addition setUpAddition(void);
 
-/// @brief 
-/// @param  
-/// @return 
+/// @brief initialization for subtraction.
+/// @return struct with operation data. 
 Subtraction setUpSubtraction(void);
 
-/// @brief 
-/// @param  
-/// @return 
+/// @brief initialization for multiplication.
+/// @return struct with operation data. 
 Multiplication setUpMultiplication(void);
 
-/// @brief 
-/// @param  
-/// @return 
+/// @brief initialization for division.
+/// @return struct with operation data. 
 Division setUpDivision(void);
 
-/// @brief 
-/// @param  
-/// @return 
-Subtraction setUpSubtraction(void);
-
-/// @brief 
-/// @param  
-/// @return 
-Multiplication setUpMultiplication(void);
-
-/// @brief 
-/// @param  
-/// @return 
+/// @brief initialization for division.
+/// @return struct with operation data. 
 Division setUpDivision(void);
 
 /// @brief This function allow the user to set the different math operators ON or OFF.
@@ -50,19 +35,41 @@ Division setUpDivision(void);
 /// @return A bool, either true or false. Determining if the operation is ON or OFF.
 bool useOperator(const char*);
 
+/// @brief Gets the minimum and maximum range of an mathimatical operation. 
+/// @param int* 
+/// @param int*
 void getMinMax(int*, int*);
 
+/// @brief Get user input. 
+/// @return a char pointer containing user input. 
 char *getString(void);
 
+/// @brief Controller for running the math tests.
+/// @param struct
+/// @param struct
+/// @param struct
+/// @param struct
 void runTests(Addition, Subtraction, Multiplication, Division);
 
+/// @brief Addition test query.
 int runAdditionTest(Addition, int);
 
+/// @brief Addition test query.
 int runSubtractionTest(Subtraction, int);
 
+/// @brief Addition test query.
 int runMultiplicationTest(Multiplication, int);
 
+/// @brief Division test query.
+/// @param struct
+/// @param int
+/// @return an integer value, which provides information about what type of test to proceed to next. 
 int runDivisionTest(Division, int);
+
+/// @brief Consverts the user input to a floating point decimal value. 
+/// @param char*
+/// @return user input as a floating point value.
+float convertInputToFloat(char *input);
 
 
 #endif //MATH_APP_PROTOTYPES_H
