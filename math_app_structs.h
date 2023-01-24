@@ -14,7 +14,8 @@
 /// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Addition
 {
-    int term_a, term_b, sum;
+    int term_a, term_b; 
+    float sum;
     int min_range, max_range;
     char *desc;
     bool status;
@@ -28,7 +29,8 @@ typedef struct Addition
 /// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Subtraction
 {
-    int term_a, term_b, sum;
+    int term_a, term_b; 
+    float sum;
     int min_range, max_range;
     char *desc;
     bool status;
@@ -44,7 +46,8 @@ typedef struct Subtraction
 /// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Multiplication
 {
-    int factor_a, factor_b, product;
+    int factor_a, factor_b; 
+    float product;
     int min_range, max_range;
     char *desc;
     bool status;
@@ -59,7 +62,8 @@ typedef struct Multiplication
 /// @brief *Finally status is keeping track on wheter or not the operation is active or not.
 typedef struct Division
 {
-    int numerator, denominator, quotient;
+    int numerator, denominator; 
+    float quotient;
     int min_range, max_range;
     char *desc;
     bool status;

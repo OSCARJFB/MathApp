@@ -14,7 +14,6 @@
 #include "math_app_structs.h"
 #include "math_app_enums.h"
 
-
 int main(void)
 {
 	srand(time(NULL));
@@ -57,7 +56,7 @@ Addition setUpAddition(void)
 	{
 		getMinMax(&add.min_range, &add.max_range);
 	}
-	
+
 	return add;
 }
 
@@ -120,12 +119,12 @@ bool useOperator(const char *msg)
 
 void getMinMax(int *min, int *max)
 {
-	if(min == NULL || max == NULL)
+	if (min == NULL || max == NULL)
 	{
-		printf("Error nullptr at: getMinMax"); 
-		exit(-1); 
+		printf("Error nullptr at: getMinMax");
+		exit(-1);
 	}
-	
+
 	char *input = NULL, *endptr = NULL;
 	bool setMin = true, setMax = true;
 	long result = 0;
@@ -134,23 +133,27 @@ void getMinMax(int *min, int *max)
 
 	while (setMin || setMax)
 	{
-		setMin == true ? printf("%s", min_msg) : printf("%s", max_msg); 
+		setMin == true ? printf("%s", min_msg) : printf("%s", max_msg);
 		input = getString();
 		errno = 0;
 		result = strtol(input, &endptr, 10);
 		if (errno != 0 || input == endptr)
 		{
-			perror("strtol");
+			printf("Invalid input\n");
 		}
-		else if(setMin)
+		else if (setMin)
 		{
 			*min = (int)result;
 			setMin = false;
 		}
-		else if(setMax)
+		else if (setMax && *min < (int)result)
 		{
 			*max = (int)result;
 			setMax = false;
+		}
+		else
+		{
+			printf("Maximum value must be greater than minimum value\n");
 		}
 
 		free(input);
@@ -162,7 +165,7 @@ void getMinMax(int *min, int *max)
 char *getString(void)
 {
 	int index = 0, key_pressed = 0;
-	char *input = NULL; 
+	char *input = NULL;
 	input = malloc(sizeof(char));
 	if (input == NULL)
 	{
@@ -218,7 +221,7 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 
 int runAdditionTest(Addition add, int typeOfTest)
 {
-	int answer = 0;
+	float answer = 0.0f;
 
 	if (add.status == false)
 	{
@@ -230,8 +233,7 @@ int runAdditionTest(Addition add, int typeOfTest)
 	add.sum = add.term_a + add.term_b;
 
 	printf("%d + %d = ", add.term_a, add.term_b);
-	scanf("%d", &answer);
-	printf("\n");
+	answer = convertInputToFloat();
 
 	if (answer == add.sum)
 	{
@@ -239,7 +241,7 @@ int runAdditionTest(Addition add, int typeOfTest)
 	}
 	else
 	{
-		printf("Wrong!\n");
+		printf("Wrong, it's %f\n", add.sum);
 	}
 
 	return 5;
@@ -247,7 +249,7 @@ int runAdditionTest(Addition add, int typeOfTest)
 
 int runSubtractionTest(Subtraction sub, int typeOfTest)
 {
-	int answer = 0;
+	float answer = 0.0f;
 
 	if (sub.status == false)
 	{
@@ -259,8 +261,7 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 	sub.sum = sub.term_a - sub.term_b;
 
 	printf("%d - %d = ", sub.term_a, sub.term_b);
-	scanf("%d", &answer);
-	printf("\n");
+	answer = convertInputToFloat();
 
 	if (answer == sub.sum)
 	{
@@ -268,14 +269,13 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 	}
 	else
 	{
-		printf("Wrong!\n");
+		printf("Wrong, it's %f\n", sub.sum);
 	}
 }
 
 int runMultiplicationTest(Multiplication mult, int typeOfTest)
 {
-	int answer = 0;
-	char *input = NULL;
+	float answer = 0.0f;
 
 	if (mult.status == false)
 	{
@@ -287,9 +287,7 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 	mult.product = mult.factor_a * mult.factor_b;
 
 	printf("%d * %d = ", mult.factor_a, mult.factor_b);
-	input = getString();
-
-	printf("\n");
+	answer = convertInputToFloat();
 
 	if (answer == mult.product)
 	{
@@ -297,13 +295,13 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 	}
 	else
 	{
-		printf("Wrong!\n");
+		printf("Wrong, it's %f\n", mult.product);
 	}
 }
 
 int runDivisionTest(Division div, int typeOfTest)
 {
-	int answer = 0;
+	float answer = 0.0f;
 
 	if (div.status == false)
 	{
@@ -320,8 +318,7 @@ int runDivisionTest(Division div, int typeOfTest)
 	div.quotient = div.numerator / div.denominator;
 
 	printf("%d / %d = ", div.numerator, div.denominator);
-	scanf("%d", &answer);
-	printf("\n");
+	answer = convertInputToFloat();
 
 	if (answer == div.quotient)
 	{
@@ -329,24 +326,34 @@ int runDivisionTest(Division div, int typeOfTest)
 	}
 	else
 	{
-		printf("Wrong!\n");
+		printf("Wrong the correct answer is %f\n", div.quotient);
 	}
 }
 
-float convertInputToFloat(char *input)
+float convertInputToFloat(void)
 {
-	if(input == NULL)
+	float answer = 0.0f;
+	char *input = NULL, *endptr = NULL;
+	bool getAnswer = true;
+
+	while (getAnswer)
 	{
-		printf("Error nullptr at: convertInputToFloat"); 
-		exit(-1); 
+		input = getString();
+		errno = 0;
+		answer = strtof(input, &endptr);
+		if (errno != 0 || input == endptr)
+		{
+			printf("Invalid input\n");
+		}
+		else
+		{
+			getAnswer = false;
+		}
+
+		free(input);
+		input = NULL;
+		endptr = NULL;
 	}
 
-	char *endptr = NULL;
-	bool setMin = true, setMax = true;
-	float result = 0;
-	free(input); 
-
-	// result = strtof();
-
-	return 1.0;
+	return answer;
 }
