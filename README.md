@@ -1,1 +1,1 @@
-# MathApp
+# MathApp, practice mathimatical operations and train your brain. 
