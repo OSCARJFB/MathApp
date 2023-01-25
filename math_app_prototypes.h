@@ -69,7 +69,7 @@ int runDivisionTest(Division, int);
 /// @brief Consverts the user input to a floating point decimal value. 
 /// @param char*
 /// @return user input as a floating point value.
-float convertInputToFloat(void);
+int convertInputToInt(void);
 
 
 #endif //MATH_APP_PROTOTYPES_H
