@@ -198,7 +198,7 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 	int typeOfTest = 1;
 
 	system("clear");
-	printf("Test started: \n");
+	printf("Test started!\n");
 
 	while (testing)
 	{
@@ -216,12 +216,15 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 		case no_test:
 			break;
 		}
+
+		printf("\n");
 	}
 }
 
 int runAdditionTest(Addition add, int typeOfTest)
 {
-	float answer = 0.0f;
+	int answer = 0;
+	clock_t t_s = 0, t_n = 0;
 
 	if (add.status == false)
 	{
@@ -232,16 +235,18 @@ int runAdditionTest(Addition add, int typeOfTest)
 	add.term_b = rand() % add.max_range + add.min_range;
 	add.sum = add.term_a + add.term_b;
 
+	t_s = clock(); 
 	printf("%d + %d = ", add.term_a, add.term_b);
-	answer = convertInputToFloat();
+	answer = convertInputToInt();
+	t_n = clock();
 
 	if (answer == add.sum)
 	{
-		printf("Correct!\n");
+		printf("Answer: %d was provided in: %f seconds which is correct.\n", add.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 	else
 	{
-		printf("Wrong, it's %f\n", add.sum);
+		printf("Answer: %d was provided in: %f seconds which is wrong.\n", add.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 
 	return 5;
@@ -249,7 +254,8 @@ int runAdditionTest(Addition add, int typeOfTest)
 
 int runSubtractionTest(Subtraction sub, int typeOfTest)
 {
-	float answer = 0.0f;
+	float answer = 0;
+	clock_t t_s = 0, t_n = 0;
 
 	if (sub.status == false)
 	{
@@ -260,22 +266,26 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 	sub.term_b = rand() % sub.max_range + sub.min_range;
 	sub.sum = sub.term_a - sub.term_b;
 
+	t_s = clock(); 
 	printf("%d - %d = ", sub.term_a, sub.term_b);
-	answer = convertInputToFloat();
+	answer = convertInputToInt();
+	t_n = clock();
+
 
 	if (answer == sub.sum)
 	{
-		printf("Correct!\n");
+		printf("Answer: %d was provided in: %lf seconds which is correct.\n", sub.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 	else
 	{
-		printf("Wrong, it's %f\n", sub.sum);
+		printf("Answer: %d was provided in: %lf seconds which is wrong.\n", sub.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 }
 
 int runMultiplicationTest(Multiplication mult, int typeOfTest)
 {
-	float answer = 0.0f;
+	int answer = 0.0f;
+	clock_t t_s = 0, t_n = 0;
 
 	if (mult.status == false)
 	{
@@ -286,22 +296,26 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 	mult.factor_b = rand() % mult.max_range + mult.min_range;
 	mult.product = mult.factor_a * mult.factor_b;
 
-	printf("%d * %d = ", mult.factor_a, mult.factor_b);
-	answer = convertInputToFloat();
+	t_s = clock(); 
+	printf("%d * %d = ", mult.factor_a, mult.factor_b); 
+	answer = convertInputToInt();
+	t_n = clock();
 
+	
 	if (answer == mult.product)
 	{
-		printf("Correct!\n");
+		printf("Answer: %d was provided in: %f seconds which is correct.\n", mult.product, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 	else
 	{
-		printf("Wrong, it's %f\n", mult.product);
+		printf("Answer: %d was provided in: %f seconds which is wrong.\n", mult.product, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 }
 
 int runDivisionTest(Division div, int typeOfTest)
 {
-	float answer = 0.0f;
+	int answer = 0;
+	clock_t t_s = 0, t_n = 0;
 
 	if (div.status == false)
 	{
@@ -312,27 +326,30 @@ int runDivisionTest(Division div, int typeOfTest)
 	{
 		div.numerator = rand() % div.max_range + div.min_range;
 		div.denominator = rand() % div.max_range + div.min_range;
-	} while (div.numerator == 0 || div.denominator == 0);
+	} while (div.numerator == 0 || div.denominator == 0 || div.numerator % div.denominator > 0);
 
 	div.numerator = div.denominator > div.numerator ? div.denominator : div.numerator;
 	div.quotient = div.numerator / div.denominator;
 
+	t_s = clock(); 
 	printf("%d / %d = ", div.numerator, div.denominator);
-	answer = convertInputToFloat();
+	answer = convertInputToInt();
+	t_n = clock();
+
 
 	if (answer == div.quotient)
 	{
-		printf("Correct!\n");
+		printf("Answer: %d was provided in: %f seconds which is correct.\n", div.quotient, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 	else
 	{
-		printf("Wrong the correct answer is %f\n", div.quotient);
+		printf("Answer: %d was provided in: %f seconds which is wrong.\n", div.quotient, (double)(t_n - t_s) / CLOCKS_PER_SEC);
 	}
 }
 
-float convertInputToFloat(void)
+int convertInputToInt(void)
 {
-	float answer = 0.0f;
+	long answer = 0;
 	char *input = NULL, *endptr = NULL;
 	bool getAnswer = true;
 
@@ -340,7 +357,7 @@ float convertInputToFloat(void)
 	{
 		input = getString();
 		errno = 0;
-		answer = strtof(input, &endptr);
+		answer = strtol(input, &endptr, 10);
 		if (errno != 0 || input == endptr)
 		{
 			printf("Invalid input\n");
