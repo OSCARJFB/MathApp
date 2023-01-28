@@ -169,7 +169,7 @@ char *getString(void)
 	input = malloc(sizeof(char));
 	if (input == NULL)
 	{
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 
 	while ((key_pressed = getchar()) != EOF)
@@ -183,7 +183,7 @@ char *getString(void)
 		input = realloc(input, (index + 1) * sizeof(char));
 		if (input == NULL)
 		{
-			exit(-1);
+			exit(EXIT_FAILURE);
 		}
 	}
 
@@ -196,35 +196,39 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 {
 	bool testing = true;
 	int typeOfTest = 1;
+	result *head = NULL;
 
 	system("clear");
-	printf("Test started!\n");
-
-	while (testing)
+	printf("\n");
+	
+	while (testing && i < 10)
 	{
 		typeOfTest = rand() % 4 + 1;
 		switch (typeOfTest)
 		{
 		case addition:
-			typeOfTest = runAdditionTest(add, typeOfTest);
+			typeOfTest = runAdditionTest(add, typeOfTest, head);
 		case subtraction:
-			typeOfTest = runSubtractionTest(sub, typeOfTest);
+			typeOfTest = runSubtractionTest(sub, typeOfTest, head);
 		case multiplication:
-			typeOfTest = runMultiplicationTest(mult, typeOfTest);
+			typeOfTest = runMultiplicationTest(mult, typeOfTest, head);
 		case division:
-			typeOfTest = runDivisionTest(div, typeOfTest);
+			typeOfTest = runDivisionTest(div, typeOfTest, head);
 		case no_test:
 			break;
 		}
-
-		printf("\n");
+		++i;
 	}
+
+	free(head);
+	head = NULL;
 }
 
-int runAdditionTest(Addition add, int typeOfTest)
+int runAdditionTest(Addition add, int typeOfTest, result *head)
 {
 	int answer = 0;
 	clock_t t_s = 0, t_n = 0;
+	double seconds = 0.0;
 
 	if (add.status == false)
 	{
@@ -235,27 +239,31 @@ int runAdditionTest(Addition add, int typeOfTest)
 	add.term_b = rand() % add.max_range + add.min_range;
 	add.sum = add.term_a + add.term_b;
 
-	t_s = clock(); 
+	t_s = clock();
 	printf("%d + %d = ", add.term_a, add.term_b);
 	answer = convertInputToInt();
 	t_n = clock();
 
+	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
+	addResultToNode(&head, seconds, add.term_a, add.term_b, answer, add.sum, '+');
+
 	if (answer == add.sum)
 	{
-		printf("Answer: %d was provided in: %f seconds which is correct.\n", add.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %f seconds which is correct.\n", add.sum, seconds);
 	}
 	else
 	{
-		printf("Answer: %d was provided in: %f seconds which is wrong.\n", add.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %f seconds which is wrong.\n", add.sum, seconds);
 	}
 
-	return 5;
+	return no_test;
 }
 
-int runSubtractionTest(Subtraction sub, int typeOfTest)
+int runSubtractionTest(Subtraction sub, int typeOfTest, result *head)
 {
 	float answer = 0;
 	clock_t t_s = 0, t_n = 0;
+	double seconds = 0.0;
 
 	if (sub.status == false)
 	{
@@ -266,26 +274,31 @@ int runSubtractionTest(Subtraction sub, int typeOfTest)
 	sub.term_b = rand() % sub.max_range + sub.min_range;
 	sub.sum = sub.term_a - sub.term_b;
 
-	t_s = clock(); 
+	t_s = clock();
 	printf("%d - %d = ", sub.term_a, sub.term_b);
 	answer = convertInputToInt();
 	t_n = clock();
 
+	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
+	addResultToNode(&head, seconds, sub.term_a, sub.term_b, answer, sub.sum, '-');
 
 	if (answer == sub.sum)
 	{
-		printf("Answer: %d was provided in: %lf seconds which is correct.\n", sub.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %lf seconds which is correct.\n", sub.sum, seconds);
 	}
 	else
 	{
-		printf("Answer: %d was provided in: %lf seconds which is wrong.\n", sub.sum, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %lf seconds which is wrong.\n", sub.sum, seconds);
 	}
+
+	return no_test;
 }
 
-int runMultiplicationTest(Multiplication mult, int typeOfTest)
+int runMultiplicationTest(Multiplication mult, int typeOfTest, result *head)
 {
 	int answer = 0.0f;
 	clock_t t_s = 0, t_n = 0;
+	double seconds = 0.0;
 
 	if (mult.status == false)
 	{
@@ -296,26 +309,31 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest)
 	mult.factor_b = rand() % mult.max_range + mult.min_range;
 	mult.product = mult.factor_a * mult.factor_b;
 
-	t_s = clock(); 
-	printf("%d * %d = ", mult.factor_a, mult.factor_b); 
+	t_s = clock();
+	printf("%d * %d = ", mult.factor_a, mult.factor_b);
 	answer = convertInputToInt();
 	t_n = clock();
 
-	
+	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
+	addResultToNode(&head, seconds, mult.factor_a, mult.factor_b, answer, mult.product, '*');
+
 	if (answer == mult.product)
 	{
-		printf("Answer: %d was provided in: %f seconds which is correct.\n", mult.product, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %f seconds which is correct.\n", mult.product, seconds);
 	}
 	else
 	{
-		printf("Answer: %d was provided in: %f seconds which is wrong.\n", mult.product, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %f seconds which is wrong.\n", mult.product, seconds);
 	}
+
+	return no_test;
 }
 
-int runDivisionTest(Division div, int typeOfTest)
+int runDivisionTest(Division div, int typeOfTest, result *head)
 {
 	int answer = 0;
 	clock_t t_s = 0, t_n = 0;
+	double seconds = 0.0;
 
 	if (div.status == false)
 	{
@@ -331,20 +349,24 @@ int runDivisionTest(Division div, int typeOfTest)
 	div.numerator = div.denominator > div.numerator ? div.denominator : div.numerator;
 	div.quotient = div.numerator / div.denominator;
 
-	t_s = clock(); 
+	t_s = clock();
 	printf("%d / %d = ", div.numerator, div.denominator);
 	answer = convertInputToInt();
 	t_n = clock();
 
+	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
+	addResultToNode(&head, seconds, div.numerator, div.denominator, answer, div.quotient, '/');
 
 	if (answer == div.quotient)
 	{
-		printf("Answer: %d was provided in: %f seconds which is correct.\n", div.quotient, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %f seconds which is correct.\n", div.quotient, seconds);
 	}
 	else
 	{
-		printf("Answer: %d was provided in: %f seconds which is wrong.\n", div.quotient, (double)(t_n - t_s) / CLOCKS_PER_SEC);
+		printf("Answer: %d was provided in: %f seconds which is wrong.\n", div.quotient, seconds);
 	}
+
+	return no_test;
 }
 
 int convertInputToInt(void)
@@ -373,4 +395,53 @@ int convertInputToInt(void)
 	}
 
 	return answer;
+}
+
+void addResultToNode(result **head, double seconds, int a, int b,
+					 int user_answer, int correct_answer, char operator)
+{
+	if (*head == NULL)
+	{
+		addFirstNode(*head, seconds, a, b,
+					 user_answer, correct_answer, operator);
+		return;
+	}
+
+	result *new_node = malloc(sizeof(result));
+	if (new_node == NULL)
+	{
+		printf("addResultFromTest: Invalid nullptr error.");
+		exit(EXIT_FAILURE);
+	}
+
+	new_node->seconds = seconds;
+	new_node->a = a, new_node->b = b;
+	new_node->user_answer = user_answer, new_node->correct_answer = correct_answer;
+	new_node->operator= operator;
+	new_node->next = NULL;
+
+	result *current_node = *head;
+	while (current_node != NULL)
+	{
+		current_node = current_node->next;
+	}
+
+	current_node->next = new_node->next;
+}
+
+void addFirstNode(result *head, double seconds, int a, int b,
+				  int user_answer, int correct_answer, char operator)
+{
+	head = malloc(sizeof(result));
+	if (head == NULL)
+	{
+		printf("addResultFromTest: Invalid nullptr error.");
+		exit(EXIT_FAILURE);
+	}
+
+	head->seconds = seconds;
+	head->a = a, head->b = b;
+	head->user_answer = user_answer, head->correct_answer = correct_answer;
+	head->operator= operator;
+	head->next = NULL;
 }

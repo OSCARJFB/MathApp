@@ -16,7 +16,6 @@ typedef struct Addition
 {
     int term_a, term_b, sum;
     int min_range, max_range;
-    char *desc;
     bool status;
 }Addition;
 
@@ -30,7 +29,6 @@ typedef struct Subtraction
 {
     int term_a, term_b, sum;
     int min_range, max_range;
-    char *desc;
     bool status;
 }Subtraction;
 
@@ -46,7 +44,6 @@ typedef struct Multiplication
 {
     int factor_a, factor_b, product;
     int min_range, max_range;
-    char *desc;
     bool status;
 }Multiplication;
 
@@ -61,8 +58,17 @@ typedef struct Division
 {
     int numerator, denominator, quotient;
     int min_range, max_range;
-    char *desc;
     bool status;
 }Division;
+
+/// @brief This data structure is used as a linked list which stores the result of the math test.
+typedef struct result
+{
+    double seconds; 
+    int a, b;
+    int user_answer, correct_answer;
+    char operator;
+    struct result *next;
+}result;
 
 #endif // MATH_APP_STRUCTS_H
