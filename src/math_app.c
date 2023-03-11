@@ -196,35 +196,30 @@ void runTests(Addition add, Subtraction sub, Multiplication mult, Division div)
 {
 	bool testing = true;
 	int typeOfTest = 1;
-	result *head = NULL;
 
 	system("clear");
 	printf("\n");
 	
-	while (testing && i < 10)
+	for(int i = 0; testing && i < 100; ++i)
 	{
 		typeOfTest = rand() % 4 + 1;
 		switch (typeOfTest)
 		{
 		case addition:
-			typeOfTest = runAdditionTest(add, typeOfTest, head);
+			typeOfTest = runAdditionTest(add, typeOfTest);
 		case subtraction:
-			typeOfTest = runSubtractionTest(sub, typeOfTest, head);
+			typeOfTest = runSubtractionTest(sub, typeOfTest);
 		case multiplication:
-			typeOfTest = runMultiplicationTest(mult, typeOfTest, head);
+			typeOfTest = runMultiplicationTest(mult, typeOfTest);
 		case division:
-			typeOfTest = runDivisionTest(div, typeOfTest, head);
+			typeOfTest = runDivisionTest(div, typeOfTest);
 		case no_test:
 			break;
 		}
-		++i;
 	}
-
-	free(head);
-	head = NULL;
 }
 
-int runAdditionTest(Addition add, int typeOfTest, result *head)
+int runAdditionTest(Addition add, int typeOfTest)
 {
 	int answer = 0;
 	clock_t t_s = 0, t_n = 0;
@@ -245,7 +240,6 @@ int runAdditionTest(Addition add, int typeOfTest, result *head)
 	t_n = clock();
 
 	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
-	addResultToNode(&head, seconds, add.term_a, add.term_b, answer, add.sum, '+');
 
 	if (answer == add.sum)
 	{
@@ -259,7 +253,7 @@ int runAdditionTest(Addition add, int typeOfTest, result *head)
 	return no_test;
 }
 
-int runSubtractionTest(Subtraction sub, int typeOfTest, result *head)
+int runSubtractionTest(Subtraction sub, int typeOfTest)
 {
 	float answer = 0;
 	clock_t t_s = 0, t_n = 0;
@@ -280,7 +274,6 @@ int runSubtractionTest(Subtraction sub, int typeOfTest, result *head)
 	t_n = clock();
 
 	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
-	addResultToNode(&head, seconds, sub.term_a, sub.term_b, answer, sub.sum, '-');
 
 	if (answer == sub.sum)
 	{
@@ -294,7 +287,7 @@ int runSubtractionTest(Subtraction sub, int typeOfTest, result *head)
 	return no_test;
 }
 
-int runMultiplicationTest(Multiplication mult, int typeOfTest, result *head)
+int runMultiplicationTest(Multiplication mult, int typeOfTest)
 {
 	int answer = 0.0f;
 	clock_t t_s = 0, t_n = 0;
@@ -315,7 +308,6 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest, result *head)
 	t_n = clock();
 
 	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
-	addResultToNode(&head, seconds, mult.factor_a, mult.factor_b, answer, mult.product, '*');
 
 	if (answer == mult.product)
 	{
@@ -329,7 +321,7 @@ int runMultiplicationTest(Multiplication mult, int typeOfTest, result *head)
 	return no_test;
 }
 
-int runDivisionTest(Division div, int typeOfTest, result *head)
+int runDivisionTest(Division div, int typeOfTest)
 {
 	int answer = 0;
 	clock_t t_s = 0, t_n = 0;
@@ -355,7 +347,6 @@ int runDivisionTest(Division div, int typeOfTest, result *head)
 	t_n = clock();
 
 	seconds = (double)(t_n - t_n) / CLOCKS_PER_SEC;
-	addResultToNode(&head, seconds, div.numerator, div.denominator, answer, div.quotient, '/');
 
 	if (answer == div.quotient)
 	{
@@ -395,53 +386,4 @@ int convertInputToInt(void)
 	}
 
 	return answer;
-}
-
-void addResultToNode(result **head, double seconds, int a, int b,
-					 int user_answer, int correct_answer, char operator)
-{
-	if (*head == NULL)
-	{
-		addFirstNode(*head, seconds, a, b,
-					 user_answer, correct_answer, operator);
-		return;
-	}
-
-	result *new_node = malloc(sizeof(result));
-	if (new_node == NULL)
-	{
-		printf("addResultFromTest: Invalid nullptr error.");
-		exit(EXIT_FAILURE);
-	}
-
-	new_node->seconds = seconds;
-	new_node->a = a, new_node->b = b;
-	new_node->user_answer = user_answer, new_node->correct_answer = correct_answer;
-	new_node->operator= operator;
-	new_node->next = NULL;
-
-	result *current_node = *head;
-	while (current_node != NULL)
-	{
-		current_node = current_node->next;
-	}
-
-	current_node->next = new_node->next;
-}
-
-void addFirstNode(result *head, double seconds, int a, int b,
-				  int user_answer, int correct_answer, char operator)
-{
-	head = malloc(sizeof(result));
-	if (head == NULL)
-	{
-		printf("addResultFromTest: Invalid nullptr error.");
-		exit(EXIT_FAILURE);
-	}
-
-	head->seconds = seconds;
-	head->a = a, head->b = b;
-	head->user_answer = user_answer, head->correct_answer = correct_answer;
-	head->operator= operator;
-	head->next = NULL;
 }
